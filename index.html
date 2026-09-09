@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Opportunity Lab</title>
+<style>
+:root{
+  --bg:#f6f7f8;
+  --panel:#ffffff;
+  --ink:#16181d;
+  --muted:#69707d;
+  --line:#e3e6ea;
+  --accent:#1f6feb;
+  --accent2:#0f766e;
+  --danger:#b42318;
+  --soft:#eef4ff;
+  --shadow:0 8px 24px rgba(20,25,35,.06);
+  --radius:16px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1240px;margin:0 auto;padding:28px}
+.topbar{
+  display:flex;gap:18px;justify-content:space-between;align-items:flex-start;
+  margin-bottom:22px
+}
+.brand h1{margin:0;font-size:29px;letter-spacing:-.5px}
+.brand p{margin:6px 0 0;color:var(--muted);max-width:700px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  padding:10px 13px;border-radius:10px;font-weight:650
+}
+.btn:hover{border-color:#c8ccd2}
+.btn.primary{background:var(--ink);color:white;border-color:var(--ink)}
+.btn.blue{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.danger{color:var(--danger)}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:20px}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow)
+}
+.sidebar{padding:18px;position:sticky;top:18px;height:fit-content}
+.section-title{
+  font-size:12px;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--muted);font-weight:800;margin:4px 0 10px
+}
+label{font-size:13px;font-weight:700;display:block;margin:12px 0 6px}
+input,textarea,select{
+  width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 11px;
+  background:#fff;color:var(--ink);outline:none
+}
+input:focus,textarea:focus,select:focus{border-color:#9bbcf5;box-shadow:0 0 0 3px rgba(31,111,235,.10)}
+textarea{min-height:82px;resize:vertical}
+.stage-list{display:grid;gap:8px;margin-top:14px}
+.stage{
+  border:1px solid var(--line);border-radius:12px;padding:11px 12px;
+  display:flex;justify-content:space-between;gap:12px;align-items:center;
+  background:#fff
+}
+.stage.active{border-color:#b7cdf8;background:var(--soft)}
+.stage strong{font-size:14px}
+.badge{
+  min-width:28px;height:28px;border-radius:999px;background:#f0f2f5;
+  display:grid;place-items:center;font-size:12px;font-weight:800;color:var(--muted)
+}
+.progress-wrap{margin-top:16px}
+.progress{height:9px;background:#edf0f3;border-radius:999px;overflow:hidden}
+.progress > div{height:100%;background:var(--accent);width:0}
+.small{font-size:12px;color:var(--muted)}
+.main{display:grid;gap:18px}
+.hero{padding:20px}
+.hero-row{display:grid;grid-template-columns:1.4fr .6fr;gap:18px}
+.hero h2{margin:0 0 8px;font-size:22px}
+.focus-box{padding:14px;border-radius:12px;background:#f7f9fb;border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.stat b{display:block;font-size:23px;margin-bottom:2px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tab{
+  border:1px solid var(--line);background:#fff;padding:8px 11px;border-radius:999px;
+  font-weight:700;font-size:13px
+}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel{padding:18px}
+.panel h3{margin:0 0 4px}
+.panel .hint{margin:0 0 15px;color:var(--muted);font-size:13px}
+.entry{
+  border:1px solid var(--line);border-radius:12px;padding:13px;margin-top:10px;background:#fff
+}
+.entry-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.entry h4{margin:0;font-size:15px}
+.entry p{margin:5px 0 0;color:var(--muted);font-size:13px;white-space:pre-wrap}
+.entry-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.pill{font-size:11px;font-weight:750;padding:5px 7px;border-radius:999px;background:#f0f2f5;color:#59606c}
+.score{background:#eaf7f4;color:#0f6a60}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.form-grid .wide{grid-column:1/-1}
+.score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.score-grid label{margin:0;font-size:11px;color:var(--muted)}
+.score-grid select{margin-top:5px}
+.empty{
+  border:1px dashed #cfd4db;border-radius:12px;padding:20px;text-align:center;
+  color:var(--muted);margin-top:12px
+}
+.checklist{display:grid;gap:8px}
+.check{
+  display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--line);
+  border-radius:10px
+}
+.check input{width:auto;margin-top:2px}
+.quote{
+  margin:12px 0;padding:12px 14px;border-left:3px solid var(--accent);
+  background:#f8fafc;border-radius:8px;color:#3e4652
+}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kicker{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.week-summary{
+  padding:14px;border:1px solid var(--line);border-radius:12px;background:#fbfcfd
+}
+footer{padding:16px 0 4px;color:var(--muted);font-size:12px}
+.hidden{display:none!important}
+@media(max-width:900px){
+  .app{padding:16px}
+  .grid{grid-template-columns:1fr}
+  .sidebar{position:static}
+  .hero-row,.review-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .score-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){
+  .topbar{display:block}
+  .actions{margin-top:12px}
+  .form-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">
+      <h1>Opportunity Lab</h1>
+      <p>A weekly system for finding problems worth solving before you build anything.</p>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="exportData()">Export</button>
+      <label class="btn" style="margin:0">Import<input id="importFile" type="file" accept=".json" hidden onchange="importData(event)"></label>
+      <button class="btn danger" onclick="resetWeek()">Reset week</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <aside class="card sidebar">
+      <div class="section-title">This week</div>
+      <label>Week starting</label>
+      <input id="weekDate" type="date" onchange="switchWeek()" />
+
+      <label>Customer group</label>
+      <input id="customerGroup" placeholder="e.g. Finnish micro-importers buying from China" oninput="saveMeta()" />
+
+      <label>Where will I find them?</label>
+      <textarea id="channels" placeholder="Reddit, Facebook groups, Xiaohongshu, LinkedIn, industry forums..." oninput="saveMeta()"></textarea>
+
+      <div class="stage-list">
+        <div class="stage active"><strong>1. Observe problems</strong><span class="badge" id="problemCount">0</span></div>
+        <div class="stage"><strong>2. Interview people</strong><span class="badge" id="interviewCount">0</span></div>
+        <div class="stage"><strong>3. Rank problems</strong><span class="badge" id="rankCount">0</span></div>
+        <div class="stage"><strong>4. Run paid test</strong><span class="badge" id="testCount">0</span></div>
+        <div class="stage"><strong>5. Review</strong><span class="badge" id="reviewDone">—</span></div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress"><div id="progressBar"></div></div>
+        <div class="small" id="progressText" style="margin-top:6px">0% complete</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="card hero">
+        <div class="hero-row">
+          <div>
+            <div class="kicker">Rule of the week</div>
+            <h2>Do not build until the problem survives contact with real people.</h2>
+            <div class="quote">Evidence beats enthusiasm. Payment beats compliments.</div>
+          </div>
+          <div class="focus-box">
+            <div class="kicker">Target</div>
+            <div class="small" style="margin-top:8px">Aim for:</div>
+            <b>10 problems · 5 interviews · 1 paid test</b>
+          </div>
+        </div>
+        <div class="stats" style="margin-top:14px">
+          <div class="stat"><b id="sProblems">0</b><span class="small">Problems logged</span></div>
+          <div class="stat"><b id="sInterviews">0</b><span class="small">Interviews</span></div>
+          <div class="stat"><b id="sTopScore">—</b><span class="small">Best problem score</span></div>
+          <div class="stat"><b id="sRevenue">€0</b><span class="small">Validation revenue</span></div>
+        </div>
+      </section>
+
+      <section class="card panel">
+        <div class="tabs">
+          <button class="tab active" data-tab="problems" onclick="showTab('problems')">Problems</button>
+          <button class="tab" data-tab="interviews" onclick="showTab('interviews')">Interviews</button>
+          <button class="tab" data-tab="ranking" onclick="showTab('ranking')">Ranking</button>
+          <button class="tab" data-tab="tests" onclick="showTab('tests')">Paid test</button>
+          <button class="tab" data-tab="review" onclick="showTab('review')">Weekly review</button>
+        </div>
+
+        <div id="problems" class="tabpane">
+          <h3>Problem log</h3>
+          <p class="hint">Capture what people actually struggle with. Do not write product ideas here.</p>
+          <div class="form-grid">
+            <div class="wide"><label>Problem statement</label><input id="pStatement" placeholder='e.g. "I cannot tell which supplier is trustworthy."' /></div>
+            <div><label>Where did you see/hear it?</label><input id="pSource" placeholder="Interview, Reddit, Facebook, review..." /></div>
+            <div><label>Evidence / quote</label><input id="pEvidence" placeholder="What specifically made you believe this is real?" /></div>
+            <div><label>Current workaround</label><input id="pWorkaround" placeholder="Spreadsheet, asking friends, paying consultant..." /></div>
+            <div><label>What happens if unsolved?</label><input id="pConsequence" placeholder="Lost money, wasted time, anxiety, missed sale..." /></div>
+          </div>
+          <button class="btn blue" style="margin-top:12px" onclick="addProblem()">Add problem</button>
+          <div id="problemList"></div>
+        </div>
+
+        <div id="interviews" class="tabpane hidden">
+          <h3>Customer interviews</h3>
+          <p class="hint">Ask about past behavior. Avoid “Would you use my app?”</p>
+          <div class="form-grid">
+            <div><label>Person / role</label><input id="iPerson" placeholder="e.g. owner of small webshop" /></div>
+            <div><label>Date</label><input id="iDate" type="date" /></div>
+            <div class="wide"><label>What are they trying to do?</label><input id="iJob" placeholder="The job or outcome they want" /></div>
+            <div class="wide"><label>What is difficult today?</label><textarea id="iPain"></textarea></div>
+            <div><label>What do they currently do?</label><textarea id="iCurrent"></textarea></div>
+            <div><label>Money/time at stake?</label><textarea id="iStake"></textarea></div>
+            <div class="wide"><label>Strongest quote / evidence</label><input id="iQuote" placeholder="Use their own words when possible" /></div>
+          </div>
+          <button class="btn blue" style="margin-top:12px" onclick="addInterview()">Add interview</button>
+          <div id="interviewList"></div>
+        </div>
+
+        <div id="ranking" class="tabpane hidden">
+          <h3>Rank the problems</h3>
+          <p class="hint">Score only after collecting evidence. 1 = weak, 5 = strong.</p>
+          <div id="rankingList"></div>
+        </div>
+
+        <div id="tests" class="tabpane hidden">
+          <h3>Paid validation test</h3>
+          <p class="hint">Offer the smallest useful outcome manually before building software.</p>
+          <div class="form-grid">
+            <div><label>Problem being tested</label><select id="tProblem"></select></div>
+            <div><label>Price asked (€)</label><input id="tPrice" type="number" min="0" step="1" placeholder="50" /></div>
+            <div class="wide"><label>Offer</label><input id="tOffer" placeholder="e.g. Fixed-price supplier comparison report" /></div>
+            <div><label>People approached</label><input id="tApproached" type="number" min="0" /></div>
+            <div><label>People who paid</label><input id="tPaid" type="number" min="0" /></div>
+            <div class="wide"><label>What happened?</label><textarea id="tResult" placeholder="What did people do, object to, or ask for?"></textarea></div>
+          </div>
+          <button class="btn blue" style="margin-top:12px" onclick="addTest()">Log test</button>
+          <div id="testList"></div>
+        </div>
+
+        <div id="review" class="tabpane hidden">
+          <h3>Weekly review</h3>
+          <p class="hint">Make one decision: continue, change direction, or drop it.</p>
+          <div class="review-grid">
+            <div>
+              <label>Strongest evidence this week</label>
+              <textarea id="rEvidence" oninput="saveReview()"></textarea>
+            </div>
+            <div>
+              <label>What surprised me?</label>
+              <textarea id="rSurprise" oninput="saveReview()"></textarea>
+            </div>
+            <div>
+              <label>What did people actually pay for / try to solve?</label>
+              <textarea id="rBehavior" oninput="saveReview()"></textarea>
+            </div>
+            <div>
+              <label>What should I NOT build?</label>
+              <textarea id="rDontBuild" oninput="saveReview()"></textarea>
+            </div>
+            <div>
+              <label>Decision</label>
+              <select id="rDecision" onchange="saveReview()">
+                <option value="">Choose...</option>
+                <option>Continue with this problem</option>
+                <option>Narrow the customer/problem</option>
+                <option>Run another validation test</option>
+                <option>Drop this direction</option>
+              </select>
+            </div>
+            <div>
+              <label>Next week's customer group / hypothesis</label>
+              <input id="rNext" oninput="saveReview()" />
+            </div>
+          </div>
+          <div class="week-summary" style="margin-top:14px">
+            <b>Decision rule</b>
+            <p class="small" style="margin-bottom:0">Do not continue because you already spent time on it. Continue because evidence got stronger.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card panel">
+        <h3>Interview prompts</h3>
+        <p class="hint">Keep these visible during conversations.</p>
+        <div class="checklist">
+          <div class="check"><input type="checkbox"><div><b>Tell me about the last time you tried to do this.</b><div class="small">Past behavior is more reliable than hypothetical intent.</div></div></div>
+          <div class="check"><input type="checkbox"><div><b>What was the hardest part?</b></div></div>
+          <div class="check"><input type="checkbox"><div><b>How do you solve it today?</b></div></div>
+          <div class="check"><input type="checkbox"><div><b>How much time or money does that cost?</b></div></div>
+          <div class="check"><input type="checkbox"><div><b>What happens if you do nothing?</b></div></div>
+          <div class="check"><input type="checkbox"><div><b>Have you paid for anything to solve it?</b></div></div>
+        </div>
+      </section>
+
+      <footer>Your data stays in this browser unless you export it.</footer>
+    </main>
+  </div>
+</div>
+
+<script>
+const STORE='opportunity_lab_v1';
+let state={weeks:{}};
+let currentWeek='';
+
+function mondayOf(date=new Date()){
+  const d=new Date(date); const day=d.getDay()||7;
+  if(day!==1)d.setDate(d.getDate()-day+1);
+  return d.toISOString().slice(0,10);
+}
+function blankWeek(){
+  return {customerGroup:'',channels:'',problems:[],interviews:[],tests:[],review:{
+    evidence:'',surprise:'',behavior:'',dontBuild:'',decision:'',next:''
+  }};
+}
+function load(){
+  try{state=JSON.parse(localStorage.getItem(STORE))||{weeks:{}}}catch(e){state={weeks:{}}}
+  currentWeek=mondayOf();
+  document.getElementById('weekDate').value=currentWeek;
+  ensureWeek();
+  render();
+}
+function ensureWeek(){ if(!state.weeks[currentWeek]) state.weeks[currentWeek]=blankWeek(); }
+function save(){localStorage.setItem(STORE,JSON.stringify(state));renderStats()}
+function W(){ensureWeek();return state.weeks[currentWeek]}
+function switchWeek(){
+  currentWeek=document.getElementById('weekDate').value||mondayOf();
+  ensureWeek(); render();
+}
+function saveMeta(){
+  W().customerGroup=document.getElementById('customerGroup').value;
+  W().channels=document.getElementById('channels').value; save();
+}
+function addProblem(){
+  const s=v('pStatement').trim(); if(!s)return alert('Add a problem statement first.');
+  W().problems.push({
+    id:Date.now(),statement:s,source:v('pSource'),evidence:v('pEvidence'),
+    workaround:v('pWorkaround'),consequence:v('pConsequence'),
+    scores:{frequency:0,pain:0,money:0,alternatives:0,reach:0}
+  });
+  ['pStatement','pSource','pEvidence','pWorkaround','pConsequence'].forEach(id=>setv(id,''));
+  save(); renderProblems(); renderRanking(); renderTestOptions();
+}
+function addInterview(){
+  const person=v('iPerson').trim(); if(!person)return alert('Add a person or role first.');
+  W().interviews.push({id:Date.now(),person,date:v('iDate'),job:v('iJob'),pain:v('iPain'),
+    current:v('iCurrent'),stake:v('iStake'),quote:v('iQuote')});
+  ['iPerson','iDate','iJob','iPain','iCurrent','iStake','iQuote'].forEach(id=>setv(id,''));
+  save(); renderInterviews();
+}
+function totalScore(p){
+  const s=p.scores||{}; return ['frequency','pain','money','alternatives','reach'].reduce((a,k)=>a+(+s[k]||0),0)
+}
+function scoreProblem(id,key,val){
+  const p=W().problems.find(x=>x.id===id); if(!p)return;
+  p.scores=p.scores||{}; p.scores[key]=+val; save(); renderRanking();
+}
+function addTest(){
+  const pid=+v('tProblem'); if(!pid)return alert('Choose a problem first.');
+  const price=+v('tPrice')||0, paid=+v('tPaid')||0;
+  W().tests.push({id:Date.now(),problemId:pid,offer:v('tOffer'),price,
+    approached:+v('tApproached')||0,paid,result:v('tResult'),revenue:price*paid});
+  ['tOffer','tPrice','tApproached','tPaid','tResult'].forEach(id=>setv(id,''));
+  save(); renderTests();
+}
+function saveReview(){
+  const r=W().review;
+  r.evidence=v('rEvidence');r.surprise=v('rSurprise');r.behavior=v('rBehavior');
+  r.dontBuild=v('rDontBuild');r.decision=v('rDecision');r.next=v('rNext'); save();
+}
+function del(kind,id){
+  if(!confirm('Delete this item?'))return;
+  W()[kind]=W()[kind].filter(x=>x.id!==id); save(); render();
+}
+function render(){
+  setv('customerGroup',W().customerGroup||''); setv('channels',W().channels||'');
+  renderProblems(); renderInterviews(); renderRanking(); renderTestOptions(); renderTests(); renderReview(); renderStats();
+}
+function renderProblems(){
+  const el=document.getElementById('problemList');
+  const arr=W().problems;
+  if(!arr.length){el.innerHTML='<div class="empty">No problems yet. Start by observing, searching communities, or speaking to one person.</div>';return}
+  el.innerHTML=arr.map((p,i)=>`<div class="entry">
+    <div class="entry-head"><div><h4>${i+1}. ${esc(p.statement)}</h4><p>${esc(p.evidence||'')}</p></div>
+    <button class="btn danger" onclick="del('problems',${p.id})">Delete</button></div>
+    <div class="entry-meta">
+      ${p.source?`<span class="pill">Source: ${esc(p.source)}</span>`:''}
+      ${p.workaround?`<span class="pill">Workaround: ${esc(p.workaround)}</span>`:''}
+      ${p.consequence?`<span class="pill">Consequence: ${esc(p.consequence)}</span>`:''}
+      ${totalScore(p)?`<span class="pill score">${totalScore(p)}/25</span>`:''}
+    </div></div>`).join('');
+}
+function renderInterviews(){
+  const el=document.getElementById('interviewList'),arr=W().interviews;
+  if(!arr.length){el.innerHTML='<div class="empty">No interviews yet. Five short, concrete conversations are enough for a first pass.</div>';return}
+  el.innerHTML=arr.map((x,i)=>`<div class="entry">
+    <div class="entry-head"><div><h4>${i+1}. ${esc(x.person)} ${x.date?`· ${esc(x.date)}`:''}</h4>
+    <p><b>Trying to do:</b> ${esc(x.job||'—')}<br><b>Pain:</b> ${esc(x.pain||'—')}<br><b>Current solution:</b> ${esc(x.current||'—')}<br><b>Stake:</b> ${esc(x.stake||'—')}</p></div>
+    <button class="btn danger" onclick="del('interviews',${x.id})">Delete</button></div>
+    ${x.quote?`<div class="quote">“${esc(x.quote)}”</div>`:''}</div>`).join('');
+}
+function renderRanking(){
+  const el=document.getElementById('rankingList'),arr=[...W().problems].sort((a,b)=>totalScore(b)-totalScore(a));
+  if(!arr.length){el.innerHTML='<div class="empty">Add problems first.</div>';return}
+  el.innerHTML=arr.map(p=>`<div class="entry">
+    <div class="entry-head"><h4>${esc(p.statement)}</h4><span class="pill score">${totalScore(p)}/25</span></div>
+    <div class="score-grid" style="margin-top:12px">
+      ${scoreSelect(p,'frequency','Frequency')}
+      ${scoreSelect(p,'pain','Pain')}
+      ${scoreSelect(p,'money','Money at stake')}
+      ${scoreSelect(p,'alternatives','Poor alternatives')}
+      ${scoreSelect(p,'reach','Reach customers')}
+    </div></div>`).join('');
+}
+function scoreSelect(p,key,label){
+  const val=(p.scores&&p.scores[key])||0;
+  return `<label>${label}<select onchange="scoreProblem(${p.id},'${key}',this.value)">
+    <option value="0"${val==0?' selected':''}>—</option>
+    ${[1,2,3,4,5].map(n=>`<option value="${n}"${val==n?' selected':''}>${n}</option>`).join('')}
+  </select></label>`
+}
+function renderTestOptions(){
+  const el=document.getElementById('tProblem'),cur=el.value;
+  el.innerHTML='<option value="">Choose problem...</option>'+W().problems.map(p=>`<option value="${p.id}">${esc(p.statement)}</option>`).join('');
+  if(cur)el.value=cur;
+}
+function renderTests(){
+  const el=document.getElementById('testList'),arr=W().tests;
+  if(!arr.length){el.innerHTML='<div class="empty">No paid test yet. Offer a tiny useful outcome manually.</div>';return}
+  el.innerHTML=arr.map((t,i)=>{
+    const p=W().problems.find(x=>x.id===t.problemId);
+    const rate=t.approached?Math.round(100*t.paid/t.approached):0;
+    return `<div class="entry"><div class="entry-head"><div>
+      <h4>${i+1}. ${esc(t.offer||'Validation test')}</h4>
+      <p><b>Problem:</b> ${esc(p?p.statement:'Deleted problem')}<br>
+      <b>Result:</b> ${t.paid}/${t.approached} paid (${rate}%), revenue €${t.revenue||0}<br>${esc(t.result||'')}</p>
+      </div><button class="btn danger" onclick="del('tests',${t.id})">Delete</button></div></div>`
+  }).join('');
+}
+function renderReview(){
+  const r=W().review||{};
+  setv('rEvidence',r.evidence||'');setv('rSurprise',r.surprise||'');setv('rBehavior',r.behavior||'');
+  setv('rDontBuild',r.dontBuild||'');setv('rDecision',r.decision||'');setv('rNext',r.next||'');
+}
+function renderStats(){
+  const w=W(),scores=w.problems.map(totalScore).filter(Boolean);
+  const rev=w.tests.reduce((a,t)=>a+(+t.revenue||0),0);
+  txt('problemCount',w.problems.length);txt('interviewCount',w.interviews.length);
+  txt('rankCount',scores.length);txt('testCount',w.tests.length);txt('reviewDone',w.review&&w.review.decision?'✓':'—');
+  txt('sProblems',w.problems.length);txt('sInterviews',w.interviews.length);
+  txt('sTopScore',scores.length?Math.max(...scores)+'/25':'—');txt('sRevenue','€'+rev);
+  let parts=0,total=5;
+  if(w.problems.length>=10)parts++;
+  if(w.interviews.length>=5)parts++;
+  if(scores.length>=3)parts++;
+  if(w.tests.length>=1)parts++;
+  if(w.review&&w.review.decision)parts++;
+  const pct=Math.round(parts/total*100);
+  document.getElementById('progressBar').style.width=pct+'%';txt('progressText',pct+'% complete');
+}
+function showTab(id){
+  document.querySelectorAll('.tabpane').forEach(x=>x.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='opportunity-lab-backup.json';a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=()=>{
+    try{state=JSON.parse(r.result);localStorage.setItem(STORE,JSON.stringify(state));render();alert('Imported.')}
+    catch(err){alert('Could not import this file.')}
+  }; r.readAsText(f);
+}
+function resetWeek(){
+  if(!confirm('Reset all data for this week?'))return;
+  state.weeks[currentWeek]=blankWeek();save();render();
+}
+function v(id){return document.getElementById(id).value}
+function setv(id,val){document.getElementById(id).value=val}
+function txt(id,val){document.getElementById(id).textContent=val}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+load();
+</script>
+</body>
+</html>
